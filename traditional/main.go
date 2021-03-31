@@ -3,10 +3,12 @@ package main
 import (
 	"encoding/json"
 	_ "miaosha/common"
-	"miaosha/single/order"
+	"miaosha/traditional/order"
 	"net/http"
 )
 
+
+//传统的下单流程
 func main(){
 	http.HandleFunc("/buy/goods",HandleBuyGoodsfunc)
 	http.ListenAndServe(":8030",nil)

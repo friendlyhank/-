@@ -1,4 +1,4 @@
-package Dao
+package cache
 
 import (
 	"github.com/xormplus/xorm"

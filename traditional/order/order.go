@@ -3,7 +3,7 @@ package order
 import (
 	"errors"
 	"github.com/astaxie/beego/logs"
-	"miaosha/Dao"
+	"miaosha/cache"
 	"miaosha/common/db"
 	"time"
 )
@@ -13,10 +13,9 @@ type Order struct{
 
 //创建订单
 func CreateOrder(oid int64,nums int)(order *db.Order,err error){
-
 	//商品是否存在
 	var g *db.Goods
-	g,err = Dao.GetGoods(oid)
+	g,err = cache.GetGoods(oid)
 	if err != nil{
 		return
 	}
@@ -61,7 +60,7 @@ func CreateOrder(oid int64,nums int)(order *db.Order,err error){
 
 	//扣减库存
 	goods.Stocknum -= int(nums)
-	_,err = Dao.UpdateGoods(session,goods,"stocknum")
+	_,err = cache.UpdateGoods(session,goods,"stocknum")
 	if err != nil{
 		session.Rollback()
 		logs.Error("UpdateGoods|Err|%v|",err)
