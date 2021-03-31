@@ -11,3 +11,8 @@ func TestCreateOrder(t *testing.T){
 }
 
 
+func TestBenckPayOrder(t *testing.T){
+
+}
+
+
