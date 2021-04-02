@@ -2,7 +2,6 @@ package common
 
 import (
 	"miaosha/common/db"
-	"miaosha/common/kafka"
 )
 
 func init(){
@@ -10,5 +9,5 @@ func init(){
 	db.Init()
 
 	//初始化kafka
-	kafka.Init()
+	//kafka.Init()
 }

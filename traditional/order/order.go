@@ -14,20 +14,20 @@ type Order struct{
 //创建订单
 func CreateOrder(oid int64,nums int)(order *db.Order,err error){
 	//商品是否存在
-	var g *db.Goods
-	g,err = cache.GetGoods(oid)
+	var goods *db.Goods
+	goods,err = cache.GetGoods(oid)
 	if err != nil{
 		return
 	}
 
-	if g == nil{
+	if goods == nil{
 		err = errors.New("商品不存在")
 		logs.Error("GetGoods|Err|%v|",err)
 		return
 	}
 
 	//检查库存
-	if g.Stocknum < nums{
+	if goods.Stocknum < nums{
 		err = errors.New("商品库存不足")
 		logs.Error("g.Stocknum < nums|Err|%v|",err)
 		return
@@ -38,25 +38,6 @@ func CreateOrder(oid int64,nums int)(order *db.Order,err error){
 
 	//开启事务
 	session.Begin()
-
-	//排它锁锁定订单
-	var goods = &db.Goods{}
-	var has bool
-	has,err = session.Table("goods").Where("oid =?",g.Oid).ForUpdate().Get(goods)
-	if !has || err != nil{
-		session.Rollback()
-		err = errors.New("商品不存在")
-		logs.Error("GetGoods|Err|%v|",err)
-		return
-	}
-
-	//检查库存
-	if goods.Stocknum < nums{
-		session.Rollback()
-		err = errors.New("商品库存不足")
-		logs.Error("goods.Stocknum < nums|Err|%v|",err)
-		return
-	}
 
 	//扣减库存
 	goods.Stocknum -= int(nums)

@@ -7,7 +7,7 @@ import (
 
 
 func TestCreateOrder(t *testing.T){
-	CreateOrder(100000,10)
+	CreateOrder(100000,1)
 }
 
 
